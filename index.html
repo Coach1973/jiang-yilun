@@ -278,6 +278,18 @@ footer p{font-size:20px;opacity:.8}
   .hero h1 small{font-size:20px;letter-spacing:.08em}
 }
 @media (max-width:480px){.mgrid{grid-template-columns:1fr}}
+
+/* 預約老師（2026-10-27：照榮樹下預約流程，時段固定每週二晚上 8:00，送出進「活動報名即時通知」） */
+.book-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,5vw,72px);align-items:start}
+.book-info p{font-size:22px;color:var(--ink-2);margin:0 0 18px}
+.book-info .slot-fixed{display:grid;gap:6px;background:var(--paper);border:2px solid var(--ink);border-radius:var(--r);padding:22px 26px;font-family:var(--serif);font-size:32px;font-weight:900;color:var(--ink)}
+.book-info .slot-fixed b{font-family:var(--sans);font-size:20px;color:var(--tang-deep);letter-spacing:.12em}
+.book-form{display:grid;gap:10px;background:var(--paper);border:2px solid var(--ink);border-radius:var(--r);padding:clamp(22px,3vw,36px)}
+.book-form label{font-size:20px;font-weight:700;margin-top:8px}
+.book-form input,.book-form select,.book-form textarea{font:inherit;font-size:21px;padding:12px 14px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);width:100%}
+.book-form input:focus,.book-form select:focus,.book-form textarea:focus{outline:3px solid var(--sun);border-color:var(--tang)}
+.book-form button{justify-content:center;margin-top:14px;cursor:pointer;font-family:inherit}
+@media (max-width:900px){.book-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -294,6 +306,7 @@ footer p{font-size:20px;opacity:.8}
    <li><a class="l" href="#give">公益足跡</a></li>
    <li><a class="l" href="#media">媒體牆</a></li>
    <li><a class="l" href="#photos">照片牆</a></li>
+   <li><a class="l" href="#book">預約</a></li>
    <li><a class="l" href="#contact">聯絡</a></li>
   </ul>
  </div>
@@ -313,6 +326,7 @@ footer p{font-size:20px;opacity:.8}
    </ul>
    <div class="btns">
     <a class="btn main" href="https://voice-a.tw/u/eleentalk2" target="_blank" rel="noopener">收聽診聊室</a>
+    <a class="btn" href="#book">預約老師</a>
     <a class="btn" href="https://lin.ee/mzToDm5" target="_blank" rel="noopener">LINE 預約體驗課</a>
     <a class="btn" href="https://www.instagram.com/eleenchiang/" target="_blank" rel="noopener">Instagram</a>
     <a class="btn" href="https://www.youtube.com/@eleenchiang5114" target="_blank" rel="noopener">YouTube</a>
@@ -588,6 +602,32 @@ footer p{font-size:20px;opacity:.8}
  </div>
 </section>
 
+<section id="book" class="book">
+ <div class="wrap">
+  <div class="sec-head">
+   <span class="kicker">預約老師</span>
+   <h2>想跟宜倫老師聊聊？</h2>
+  </div>
+  <div class="book-grid">
+   <div class="book-info">
+    <p class="slot-fixed"><b>固定時段</b>每週二　晚上 8:00</p>
+    <p>老師的預約時段只有這一個，請選一個想預約的週二，留下聯絡方式，送出申請後老師會再與您確認。</p>
+   </div>
+   <form class="book-form" data-works-form="jiang-yilun" data-success="謝謝您，預約申請已送出，宜倫老師會盡快與您確認" novalidate>
+    <label for="bk-item">想預約的日期（每週二晚上 8:00）</label>
+    <select id="bk-item" name="item" required><option value="">載入中…</option></select>
+    <label for="bk-name">姓名</label>
+    <input id="bk-name" name="name" autocomplete="name" required placeholder="例：王小明">
+    <label for="bk-phone">電話或 Email</label>
+    <input id="bk-phone" name="phone" autocomplete="tel" required placeholder="老師用來與您確認時間">
+    <label for="bk-msg">想聊的內容（選填）</label>
+    <textarea id="bk-msg" name="message" rows="4" placeholder="例：想了解鋼琴體驗課、成人學琴"></textarea>
+    <button class="btn main" type="submit">送出預約申請</button>
+   </form>
+  </div>
+ </div>
+</section>
+
 <section id="contact">
  <div class="wrap">
   <div class="sec-head">
@@ -658,5 +698,21 @@ document.querySelectorAll('.chips').forEach(function(g){
   document.addEventListener('keydown',function(e){if(!lb.classList.contains('open'))return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1)});
 })();
 </script>
+<script>
+(function(){
+  var sel=document.getElementById('bk-item'); if(!sel) return;
+  var W='日一二三四五六', now=new Date(), tp=new Date(now.toLocaleString('en-US',{timeZone:'Asia/Taipei'}));
+  var d=new Date(tp.getFullYear(),tp.getMonth(),tp.getDate()); d.setDate(d.getDate()+1);
+  while(d.getDay()!==2) d.setDate(d.getDate()+1);
+  var html='<option value="">請選一個週二</option>';
+  for(var i=0;i<8;i++){
+    var m=d.getMonth()+1, dd=d.getDate(), t=m+'/'+(dd<10?'0'+dd:dd)+'（週'+W[d.getDay()]+'）晚上 8:00';
+    html+='<option value="預約 '+t+'">'+d.getFullYear()+'/'+t+'</option>';
+    d.setDate(d.getDate()+7);
+  }
+  sel.innerHTML=html;
+})();
+</script>
+<script src="/static/works-form.js" defer></script>
 </body>
 </html>
